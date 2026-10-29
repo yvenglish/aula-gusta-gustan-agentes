@@ -1,0 +1,11 @@
+const date=document.querySelector('input[type="date"]');if(date&&!date.value)date.value=new Date().toISOString().slice(0,10);
+
+document.querySelectorAll('.reveal').forEach(button=>button.addEventListener('click',()=>{const content=document.getElementById(button.dataset.target);const visible=content.classList.toggle('visible');button.textContent=visible?'Ocultar frase en español':'Ver frase en español';if(!visible){content.querySelectorAll('.translation').forEach(item=>item.classList.remove('visible'));content.querySelectorAll('.translation-button').forEach(item=>item.textContent='Ver traducción')}}));
+
+document.querySelectorAll('.translation-button').forEach(button=>button.addEventListener('click',()=>{const translation=document.getElementById(button.dataset.target);const visible=translation.classList.toggle('visible');button.textContent=visible?'Ocultar traducción':'Ver traducción'}));
+
+document.querySelector('#reset-reveals').addEventListener('click',()=>{document.querySelectorAll('.reveal-content,.translation').forEach(item=>item.classList.remove('visible'));document.querySelectorAll('.reveal').forEach(button=>button.textContent='Ver frase en español');document.querySelectorAll('.translation-button').forEach(button=>button.textContent='Ver traducción');document.querySelector('#escucha').scrollIntoView({behavior:'smooth',block:'start'})});
+
+document.querySelectorAll('.answer-key-button').forEach(button=>button.addEventListener('click',()=>{const key=document.getElementById(button.dataset.target);const visible=key.classList.toggle('visible');button.textContent=visible?'Ocultar respuestas sugeridas':'Ver respuestas sugeridas'}));
+
+const form=document.querySelector('#lesson-form');form.addEventListener('submit',async event=>{event.preventDefault();const status=document.querySelector('#form-status');status.className='';status.textContent='Enviando actividad...';try{const response=await fetch(form.action,{method:'POST',body:new FormData(form)});const data=await response.json();if(!data.success)throw new Error();status.className='form-success';status.textContent='¡Actividad enviada correctamente!'}catch(error){status.className='form-error';status.textContent='No fue posible enviar ahora. Comprueba tu conexión e inténtalo de nuevo.'}});
